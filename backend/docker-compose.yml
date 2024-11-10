@@ -1,0 +1,23 @@
+version: "3"
+services:
+  inventory-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9001:9001" # Actualizado al puerto 9001
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80" # Exponer NGINX en el puerto 80 para recibir las solicitudes externas
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

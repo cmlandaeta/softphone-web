@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 100%;
+}
+
+/* ------- Teclado Nuevo */
+
+.teclado-smartphone {
+  @apply bg-slate-100 p-5 rounded-lg shadow-lg w-full max-w-xs mx-auto;
+}
+
+.botones {
+  @apply grid gap-3 grid-cols-3 justify-items-center;
+}
+
+.tecla {
+  @apply bg-indigo-700 text-white text-lg font-semibold h-10 w-10 rounded-full shadow-md transition-transform transform hover:scale-110 active:scale-95;
+}
+
+.tecla-colgar {
+  @apply bg-red-600 text-white text-lg font-semibold h-12 w-28 rounded-full shadow-md transition-transform transform hover:scale-110 active:scale-95;
+}
+.tecla-registrar {
+  @apply bg-green-600 text-white text-lg font-semibold h-12 w-28 rounded-full shadow-md transition-transform transform hover:scale-110 active:scale-95;
+}
+
+.pantalla {
+  @apply bg-gray-800 text-white text-sm h-12 rounded-lg mb-5 text-center grid grid-cols-2 justify-center items-center shadow-lg;
+}
+
+.contenedor-colgar {
+  @apply flex justify-center mt-5;
+}
+
+.text-registrar {
+  @apply text-sm cursor-pointer text-blue-500 hover:text-blue-700;
+}
+
+.text-pantalla {
+  @apply flex flex-col items-start ml-2 text-xs md:text-nowrap;
+}
