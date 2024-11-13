@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import uno from "../tonos/1.mp3";
 import Reproduccion from "./Reproduccion";
 import CustomAlert from "./Alert";
 import Pantalla from "./Pantalla";
 import axios from "axios";
 
-const Teclado = ({ usuario }) => {
+const Teclado = ({ usuario, onSwitch, onUpdate }) => {
   const [audio, setAudio] = useState(null);
-  const [pantalla, setPantalla] = useState(null);
+
   const [idinputs, setIdInputs] = useState("");
   const [inputValue, setInputValue] = useState("");
-  const [estado, setEstado] = useState("opc");
   const [user, setUser] = useState(usuario);
-  const [status, setStatus] = useState(false);
+  const [status, setStatus] = useState("Offline");
   const [callStatus, setCallStatus] = useState("");
   const [isRegister, setRegister] = useState(true);
   const [showAlert, setShowAlert] = useState(false);
@@ -21,6 +21,7 @@ const Teclado = ({ usuario }) => {
     title: "",
     message: "",
   });
+  const navigate = useNavigate();
 
   const handleShowAlert = (type, title, message) => {
     setAlertConfig({ type, title, message });
@@ -53,50 +54,83 @@ const Teclado = ({ usuario }) => {
   };
 
   const handlecolgarllamar = async (sw) => {
-    if (sw === "reg") {
-      const response = await axios.post(
-        `${apiUrl}/api/usuarios/register`,
-        {},
-        {
-          withCredentials: true,
+    try {
+      if (sw === "reg") {
+        const response = await axios.post(
+          `${apiUrl}/api/usuarios/register`,
+          {},
+          {
+            withCredentials: true,
+          }
+        );
+        if (response.status === 200) {
+          setRegister(false);
+          setStatus("Online");
+          handleShowAlert("success", "OK!", "Extension Registrada!");
         }
-      );
-      if (response.status === 200) {
-        setRegister(false);
-        setStatus(true);
-        handleShowAlert("success", "OK!", "Extension Registrada!");
+      } else if (sw === "call") {
+        const response = await axios.post(
+          `${apiUrl}/api/call`,
+          {},
+          {
+            withCredentials: true,
+          }
+        );
+        if (response.status === 200) {
+          setCallStatus("Conectando...");
+
+          setTimeout(() => {
+            setAudio("5");
+            setCallStatus("Conectado!");
+          }, 2000);
+
+          setTimeout(() => {
+            setAudio(" ");
+            setCallStatus("Llamada Finalizada!");
+          }, 21000);
+
+          setTimeout(() => {
+            setCallStatus(" ");
+          }, 23000);
+        } else if (response.status === 401) {
+          handleShowAlert("info", "ERROR", "Registre la extension!");
+        }
       }
-    } else if (sw === "call") {
-      const response = await axios.post(
-        `${apiUrl}/api/call`,
-        {},
-        {
-          withCredentials: true,
-        }
-      );
-      setCallStatus("Conectando...");
-
-      setTimeout(() => {
-        setAudio("5");
-        setCallStatus("Conectado!");
-      }, 2000);
-
-      setTimeout(() => {
-        setAudio(" ");
-        setCallStatus("Llamada Finalizada!");
-      }, 21000);
-
-      setTimeout(() => {
-        setCallStatus(" ");
-      }, 23000);
+    } catch (error) {
+      handleShowAlert("error", "ERROR", "No se puede Registrar!");
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(
+        `${apiUrl}/api/usuarios/logout`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 200) {
+        handleShowAlert("success", "OK", "Sesión Cerrada!");
+        //navigate("/"); // Redirige a la página de login
+        onSwitch("lg");
+        setCallStatus(" ");
+        setUser(" ");
+      }
+    } catch (error) {
+      handleShowAlert("success", "OK", "Sesión Cerrada!");
+    }
+  };
+
+  const handleUpdate = () => {
+    onUpdate();
+  };
   return (
     <div className="teclado-smartphone ">
-      <Reproduccion audio={audio} />
       <Pantalla entrada={user} estado={status} estadollamada={callStatus} />
-      <div className="absolute top-0 right-0 mt-4 mr-4">
+      <Reproduccion audio={audio} />
+      <div className="absolute top-0 right-20 mt-4 mr-4">
         {showAlert && (
           <CustomAlert
             type={alertConfig.type}
@@ -230,7 +264,7 @@ const Teclado = ({ usuario }) => {
         </button>
       </div>
 
-      <div className="contenedor-colgar">
+      <div className="contenedor-colgar mb-3">
         <button
           id="colgar"
           className={`${isRegister ? "tecla-registrar" : "tecla-colgar"}`}
@@ -243,7 +277,19 @@ const Teclado = ({ usuario }) => {
           <audio id="colgar" src={uno}></audio>
           {isRegister ? "Registrar" : "Llamar"}
         </button>
+
+        {!isRegister ? (
+          <button onClick={() => handleLogout()} className="tecla-logout">
+            Logout
+          </button>
+        ) : (
+          false
+        )}
       </div>
+
+      <span className="text-registrar" onClick={() => handleUpdate()}>
+        Actualizar Cuenta
+      </span>
     </div>
   );
 };

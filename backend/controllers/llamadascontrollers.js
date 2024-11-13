@@ -13,7 +13,12 @@ Crtl.call = async (req, res) => {
     // }
     res
       .status(200)
-      .json({ message: "Haciendo Llamadas", extreg: extreg, extdest: extdest });
+      .json({
+        message: "Haciendo Llamadas",
+        extreg: extreg,
+        extdest: extdest,
+        usr: usr,
+      });
   } catch (error) {
     return res.status(500).json({ message: "Error al hacer la llamada" });
   }

@@ -40,13 +40,20 @@ class usuariosControllers {
   }
 
   async updateUsuarios(req, res) {
-    const check = validation(req.body);
+    console.log(req.body);
+    const check = await validation(req.body);
+    const { exten } = req.params.id;
 
     if (check) {
       return res.status(400).json({ error: "Todos los campos son requeridos" });
     }
 
     try {
+      const updateUser = await Usuarios.updateOne(
+        { extensionregistro: exten },
+        req.body
+      );
+      if (updateUser) res.status(200).res.json({ msg: "usuario actualizado" });
     } catch (error) {
       res
         .status(501)
@@ -78,7 +85,7 @@ class usuariosControllers {
     const { id } = req.params;
 
     try {
-      const usuario = await Usuarios.findById(id);
+      const usuario = await Usuarios.findOne({ extensionregistro: id });
 
       !usuario
         ? res.status(404).json({ mensagge: "no hay usuarios" })
@@ -95,11 +102,29 @@ class usuariosControllers {
 
     try {
       token
-        ? res.json({ message: "Extension Registrada", token })
+        ? res.status(200).json({ message: "Extension Registrada" })
         : res.status(400).json({ message: "No autorizado" });
     } catch (error) {
       res.status(501).json({ message: " No se puede registrar la extension" });
     }
+  }
+
+  async logout(req, res) {
+    res
+      .clearCookie("token_login")
+      .status(200)
+      .json({ msg: "Logout Successful" });
+  }
+
+  async validarExtension(req, res) {
+    const { exten } = req.query;
+    console.log(exten);
+    const extenExistente = await Usuarios.findOne({ extensionregistro: exten });
+    if (extenExistente) {
+      return res.status(200).json({ message: "La extension ya está en uso" });
+    }
+
+    res.status(200).json({ message: "La extension está disponible" });
   }
 }
 

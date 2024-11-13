@@ -23,22 +23,23 @@ Ctrl.login = async (req, res) => {
       usuario.extensionregistro,
       usuario.extensiondestino
     );
-    res
-      .cookie("token_login", token, {
-        httpOnly: false,
-        //secure: process.env.NODE.ENV === "production",
-        secure: false,
-        sameSite: "lax",
-        maxAge: 1000 * 60 * 60,
-      })
-      .json({
-        message: "Usuario Logueado",
-        token,
-        nombre: usuario.nombre,
-        apellido: usuario.apellido,
-        exten: usuario.extensionregistro,
-      });
-    //res.status(400).json({ message: "No autorizado" });
+    token
+      ? res
+          .cookie("token_login", token, {
+            httpOnly: true,
+            secure: process.env.NODE.ENV === "production",
+            //httpOnly: false,
+            //secure: false,
+            sameSite: "lax",
+            maxAge: 1000 * 60 * 60,
+          })
+          .json({
+            message: "Usuario Logueado",
+            nombre: usuario.nombre,
+            apellido: usuario.apellido,
+            exten: usuario.extensionregistro,
+          })
+      : res.status(400).json({ message: "No autorizado" });
   } catch (error) {
     res.status(501).json({ message: " No se puede Loguear" });
   }

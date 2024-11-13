@@ -6,11 +6,13 @@ import Register from "./Register";
 
 const apiUrl = import.meta.env.VITE_BK_URL || "http://localhost:9001";
 
-const Login = () => {
+const Login = ({}) => {
   const [showModalTeclado, setModalTeclado] = useState(false);
   const [showModalLogin, setModalLogin] = useState(true);
   const [usuario, setUsuario] = useState({});
   const [showModalRegister, setModalRegister] = useState(false);
+  const [isEditModeRegister, setIsModeRegister] = useState("");
+  const [titleModal, setTitleModal] = useState("");
 
   const [formData, setFormData] = useState({
     email: "",
@@ -38,8 +40,35 @@ const Login = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleRegister = () => {
-    setModalRegister(true);
+  const handleSwitch = (sw) => {
+    switch (sw) {
+      case "rg":
+        setModalRegister(true);
+        setModalLogin(false);
+        setTitleModal("Cree una Cuenta");
+        break;
+      case "lg":
+        setModalLogin(true);
+        setModalRegister(false);
+        setModalTeclado(false);
+        setTitleModal("Login");
+        break;
+      case "tc":
+        setModalTeclado(true);
+        setModalLogin(false);
+        setTitleModal("Registrar Extension");
+        break;
+
+      case "ac":
+        setModalTeclado(false);
+        setModalRegister(true);
+        setTitleModal("Editar Cuenta");
+        setIsModeRegister(true);
+        break;
+
+      default:
+        break;
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -53,25 +82,47 @@ const Login = () => {
         Object.keys(formData).forEach((key) => (formData[key] = ""));
       setUsuario(response.data);
       handleShowAlert("success", "OK!", "Bienvenido!");
-      setModalTeclado(true);
-      setModalLogin(false);
+      handleSwitch("tc");
     } catch (error) {
       Object.keys(formData).forEach((key) => (formData[key] = ""));
       handleShowAlert("error", "Error!", "Sin Acceso!");
     }
   };
 
+  const hanleUpdate = () => {
+    handleSwitch("ac");
+  };
+
+  useEffect(() => {
+    const handleGestionLogout = () => {};
+    handleGestionLogout();
+  }),
+    [];
+
   return (
     <div className="modal-overlay">
       <div className="modal-content">
         <h3 className="text-xl font-semibold">
-          {showModalLogin ? "Login" : "Emparejar Extension"}
+          {/* {showModalLogin ? "Login" : "Emparejar Extension"} */}
+          {titleModal}
         </h3>
 
-        <div>{showModalTeclado && <Teclado usuario={usuario} />}</div>
+        <div>
+          {showModalTeclado && (
+            <Teclado
+              usuario={usuario}
+              onUpdate={() => hanleUpdate()}
+              onSwitch={() => handleSwitch("lg")}
+            />
+          )}
+        </div>
         <div>
           {showModalRegister && (
-            <Register onStatus={handleRegister} status={true} />
+            <Register
+              edit={isEditModeRegister}
+              usuario={usuario}
+              onSwitch={() => handleSwitch("lg")}
+            />
           )}
         </div>
         <div className="absolute top-0 right-0 mt-4 mr-4">
@@ -126,16 +177,16 @@ const Login = () => {
             </div>
 
             <div className="grid grid-cols-2">
-              <div className="flex">
+              <div className="flex flex-col">
                 <span
-                  className="text-registrar"
-                  onClick={() => handleRegister()}
+                  className="text-registrar mb-2"
+                  onClick={() => handleSwitch("rg")}
                 >
                   Registrar Cuenta
                 </span>
               </div>
               <div className="flex">
-                <button className="">Enviar</button>
+                <button className="btn-enviar">Enviar</button>
               </div>
             </div>
           </form>

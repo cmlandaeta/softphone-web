@@ -36,25 +36,33 @@
   @apply bg-indigo-700 text-white text-lg font-semibold h-10 w-10 rounded-full shadow-md transition-transform transform hover:scale-110 active:scale-95;
 }
 
+.contenedor-colgar {
+  @apply flex flex-row justify-center mt-4;
+}
+
 .tecla-colgar {
-  @apply bg-red-600 text-white text-lg font-semibold h-12 w-28 rounded-full shadow-md transition-transform transform hover:scale-110 active:scale-95;
+  @apply bg-red-600 text-white text-sm font-semibold h-12 w-28 rounded-full shadow-md transition-transform transform hover:scale-110 active:scale-95;
 }
 .tecla-registrar {
-  @apply bg-green-600 text-white text-lg font-semibold h-12 w-28 rounded-full shadow-md transition-transform transform hover:scale-110 active:scale-95;
+  @apply bg-green-600 text-white text-sm font-semibold h-12 w-28 rounded-full shadow-md transition-transform transform hover:scale-110 active:scale-95;
+}
+
+.tecla-logout {
+  @apply bg-blue-600 text-white text-sm font-semibold ml-3 h-12 w-28 rounded-full shadow-md transition-transform transform hover:scale-110 active:scale-95;
 }
 
 .pantalla {
   @apply bg-gray-800 text-white text-sm h-12 rounded-lg mb-5 text-center grid grid-cols-2 justify-center items-center shadow-lg;
 }
 
-.contenedor-colgar {
-  @apply flex justify-center mt-5;
-}
-
 .text-registrar {
-  @apply text-sm cursor-pointer text-blue-500 hover:text-blue-700;
+  @apply text-sm cursor-pointer text-blue-500 hover:text-blue-700 transition-transform transform hover:scale-105 active:scale-95;
 }
 
 .text-pantalla {
   @apply flex flex-col items-start ml-2 text-xs md:text-nowrap;
+}
+
+.btn-enviar {
+  @apply bg-blue-600 text-white text-sm font-semibold h-12 w-28 rounded-md shadow-md transition-transform transform hover:scale-105 active:scale-95;
 }
