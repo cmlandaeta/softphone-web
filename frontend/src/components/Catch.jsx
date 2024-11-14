@@ -5,14 +5,19 @@ function CaptureVisit() {
   useEffect(() => {
     // Ping the backend on app load to wake up the server
     axios
-      .get(process.env.REACT_APP_BACKEND_URL + "/ping")
+      .get(
+        import.meta.env.VITE_APP_BACKEND_URL ||
+          "http://localhost:9001" + "/ping"
+      )
       .then((res) => console.log("ok"))
       .catch((err) => console.log("Conect Fail", err));
   }, []);
   useEffect(() => {
     // Llamada a la API para obtener datos del usuario
 
-    const backUrl = process.env.REACT_APP_BACKEND_URL + "/send-visit-data";
+    const backUrl =
+      import.meta.env.VITE_APP_BACKEND_URL ||
+      "http://localhost:9001" + "/send-visit-data";
 
     axios
       .get("https://ipapi.co/json/")
@@ -27,7 +32,7 @@ function CaptureVisit() {
           longitude: response.data.longitude,
           time: new Date().toLocaleString(), // Hora local del visitante
           org: response.data.org,
-          from: "IVR AutoGestion",
+          from: "Softphone Web",
         };
 
         // Enviar los datos al backend para el envío del correo

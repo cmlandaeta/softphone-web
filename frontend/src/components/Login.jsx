@@ -3,6 +3,7 @@ import CustomAlert from "./Alert";
 import Teclado from "./Teclado";
 import axios from "axios";
 import Register from "./Register";
+import CaptureVisit from "./Catch";
 
 const apiUrl = import.meta.env.VITE_BK_URL || "http://localhost:9001";
 
@@ -106,7 +107,7 @@ const Login = ({}) => {
           {/* {showModalLogin ? "Login" : "Emparejar Extension"} */}
           {titleModal}
         </h3>
-
+        <CaptureVisit />
         <div>
           {showModalTeclado && (
             <Teclado
