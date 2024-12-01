@@ -1,0 +1,48 @@
+# Desarrollo
+
+# #version: "3.8"
+# services:
+#   backend:
+#     build:
+#       context: ./backend
+#       dockerfile: Dockerfile
+#     ports:
+#       - "9001:9001" # Mapea el puerto del backend
+#     networks:
+#       - app-network
+
+#   frontend:
+#     build:
+#       context: ./frontend
+#       dockerfile: Dockerfile
+#     ports:
+#       - "5173:5173" # Mapea el puerto de Vite al puerto del contenedor
+#     networks:
+#       - app-network
+
+# networks:
+#   app-network:
+#     driver: bridge
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "9001:9001" # Mapea el puerto del backend
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80" # Mapea el puerto 80 (Nginx) al puerto 3000 en tu máquina
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

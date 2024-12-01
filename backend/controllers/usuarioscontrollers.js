@@ -118,13 +118,28 @@ class usuariosControllers {
 
   async validarExtension(req, res) {
     const { exten } = req.query;
+
     console.log(exten);
-    const extenExistente = await Usuarios.findOne({ extensionregistro: exten });
+
+    const extenExistente = await Usuarios.findOne({
+      extensionregistro: exten,
+    });
     if (extenExistente) {
       return res.status(200).json({ message: "La extension ya está en uso" });
     }
 
     res.status(200).json({ message: "La extension está disponible" });
+  }
+
+  async validarEmail(req, res) {
+    const { email } = req.query;
+
+    const emailExistente = await Usuarios.findOne({ email });
+    if (emailExistente) {
+      return res.status(200).json({ message: "El Email ya está en uso" });
+    }
+
+    res.status(200).json({ message: "Email está disponible" });
   }
 }
 

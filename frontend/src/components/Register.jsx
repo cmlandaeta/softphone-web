@@ -15,8 +15,8 @@ const Register = ({ usuario, onSwitch, edit }) => {
   const [usuarios, setUsuarios] = useState([]);
   const isEditMode = Boolean(usuario);
   const haEntradoEnEdicion = useRef(false);
-
-  const [error, setError] = useState("");
+  const [errorExten, setErrorExten] = useState("");
+  const [errorEmail, setErrorEmail] = useState("");
 
   useEffect(() => {
     if (edit && !haEntradoEnEdicion.current) {
@@ -83,49 +83,70 @@ const Register = ({ usuario, onSwitch, edit }) => {
   const handleCloseAlert = () => {
     setShowAlert(false);
   };
-
   const validarExten = async (exten) => {
-    const response = await axios.get(
-      `${apiUrl}/api/exten/validar-ext?exten=${exten}`
-    );
+    const extPattern = /^(100|[1-9]?[0-9])$/;
+    const extension = parseInt(exten);
 
-    const extenDuplicado = usuarios.some(
-      (usr) => usr.extensionregistro === parseInt(exten)
-    );
+    console.log(extension);
 
-    if (extenDuplicado || response.status === 400) {
-      setError(`La extensions ${exten} ya está en uso.`);
+    if (!extPattern.test(extension)) {
+      setErrorExten("El número de extensión debe ser del 1 al 100.");
+      return;
+    }
+
+    try {
+      const response = await axios.get(
+        `${apiUrl}/api/exten/validar-ext/?exten=${extension}`
+      );
+
+      const extenDuplicado = usuarios.some(
+        (usr) => usr.extensionregistro === extension
+      );
+
+      if (extenDuplicado || response.status === 400) {
+        setErrorExten(`La extensión ${extension} ya está en uso.`);
+      } else {
+        setErrorExten(""); // Limpia el error si no hay problemas.
+      }
+    } catch (error) {
+      setErrorExten("Error al validar la extensión.");
     }
   };
 
-  const validarEmail = async (exten) => {
-    const response = await axios.get(
-      `${apiUrl}/api/exten/validar-ext?exten=${exten}`
-    );
+  const validarEmail = async (email) => {
+    if (!email.includes("@") || !email.includes(".")) {
+      setErrorEmail("El email debe tener un formato válido.");
+      return;
+    }
 
-    const extenDuplicado = usuarios.some(
-      (usr) => usr.extensionregistro === parseInt(exten)
-    );
+    try {
+      const response = await axios.get(
+        `${apiUrl}/api/exten/validar-email?email=${email}`
+      );
 
-    if (extenDuplicado || response.status === 400) {
-      setError(`La extensions ${exten} ya está en uso.`);
+      const emailDuplicado = usuarios.some((usr) => usr.email === email);
+
+      if (emailDuplicado || response.status === 400) {
+        setErrorEmail(`El email ${email} ya está en uso.`);
+      } else {
+        setErrorEmail(""); // Limpia el error si no hay problemas.
+      }
+    } catch (error) {
+      setErrorEmail("Error al validar el email.");
     }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    const extPattern = /^(100|[1-9]?[0-9])$/;
+    if (name === "extensionregistro") {
+      validarExten(value);
+    }
 
-    validarExten(value);
-    setError(" ");
+    if (name === "email") {
+      validarEmail(value);
+    }
 
-    // if (extPattern.test(value)) {
-    //   setError("");
-    //   validarExten(value);
-    // } else {
-    //   setError("El Numero de Extension debe ser del 1 al 100.");
-    // }
     setFormData({ ...formData, [name]: value });
   };
 
@@ -139,7 +160,7 @@ const Register = ({ usuario, onSwitch, edit }) => {
         );
         if (response.status === 200)
           handleShowAlert("success", "OK!", "Usuario Actualizado con Éxito!");
-      } else {
+      } else if (!errorEmail && !errorExten) {
         const response = await axios.post(`${apiUrl}/api/usuarios`, formData);
         if (response.status === 200) {
           setModalTeclado(true);
@@ -231,6 +252,11 @@ const Register = ({ usuario, onSwitch, edit }) => {
               >
                 Email
               </label>
+              {errorEmail && (
+                <p className="text-sm font-semibold text-red-500">
+                  {errorEmail}
+                </p>
+              )}
             </div>
 
             <div className="relative z-0 w-full mb-5 group">
@@ -270,8 +296,10 @@ const Register = ({ usuario, onSwitch, edit }) => {
                 Extension de Registro
               </label>
 
-              {error && (
-                <p className="text-sm font-semibold text-red-500">{error}</p>
+              {errorExten && (
+                <p className="text-sm font-semibold text-red-500">
+                  {errorExten}
+                </p>
               )}
             </div>
             <div className="relative z-0 w-full mb-5 group">

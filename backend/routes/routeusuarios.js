@@ -5,7 +5,8 @@ const routeUsuarios = express.Router();
 
 routeUsuarios.get("/", usuariosControllers.getUsuarios);
 routeUsuarios.get("/:id", usuariosControllers.getUsuario);
-routeUsuarios.get("/validar-ext", usuariosControllers.validarExtension);
+// routeUsuarios.get("/validar-ext", usuariosControllers.validarExtension);
+// routeUsuarios.get("/validar-email", usuariosControllers.validarEmail);
 routeUsuarios.post("/", usuariosControllers.createUsuarios);
 routeUsuarios.post("/register", verificarToken, usuariosControllers.register);
 routeUsuarios.post("/logout", usuariosControllers.logout);

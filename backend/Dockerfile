@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 9001
 
 # Comando para ejecutar la aplicación
-CMD ["node", "app.js"]
+CMD ["npm", "start"]

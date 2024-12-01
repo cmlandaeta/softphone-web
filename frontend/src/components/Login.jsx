@@ -4,6 +4,7 @@ import Teclado from "./Teclado";
 import axios from "axios";
 import Register from "./Register";
 import CaptureVisit from "./Catch";
+import Derechos from "./Derechos";
 
 const apiUrl = import.meta.env.VITE_BK_URL || "http://localhost:9001";
 
@@ -100,6 +101,21 @@ const Login = ({}) => {
   }),
     [];
 
+  const handleClick = (pn) => {
+    switch (pn) {
+      case 1:
+        window.open(
+          "https://portafolio-4z71.onrender.com",
+          "_blank",
+          "noopener,noreferrer"
+        );
+        break;
+
+      default:
+        break;
+    }
+  };
+
   return (
     <div className="modal-overlay">
       <div className="modal-content">
@@ -192,6 +208,9 @@ const Login = ({}) => {
             </div>
           </form>
         )}
+        <div>
+          {showModalLogin && <Derechos onPortafolio={() => handleClick(1)} />}
+        </div>
       </div>
     </div>
   );
