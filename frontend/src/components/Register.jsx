@@ -87,8 +87,6 @@ const Register = ({ usuario, onSwitch, edit }) => {
     const extPattern = /^(100|[1-9]?[0-9])$/;
     const extension = parseInt(exten);
 
-    console.log(extension);
-
     if (!extPattern.test(extension)) {
       setErrorExten("El número de extensión debe ser del 1 al 100.");
       return;
@@ -237,6 +235,7 @@ const Register = ({ usuario, onSwitch, edit }) => {
             </div>
             <div className="relative z-0 w-full mb-5 group">
               <input
+                disabled={isEditarModo}
                 type="text"
                 name="email"
                 id="email"
@@ -280,6 +279,7 @@ const Register = ({ usuario, onSwitch, edit }) => {
 
             <div className="relative z-0 w-full mb-5 group">
               <input
+                disabled={isEditarModo}
                 type="number"
                 name="extensionregistro"
                 id="extreg"
@@ -304,6 +304,7 @@ const Register = ({ usuario, onSwitch, edit }) => {
             </div>
             <div className="relative z-0 w-full mb-5 group">
               <input
+                disabled={isEditarModo}
                 type="number"
                 name="extensiondestino"
                 id="extdest"

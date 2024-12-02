@@ -1,6 +1,6 @@
-# Desarrollo
+#Desarrollo
 
-# #version: "3.8"
+#version: "3.8"
 # services:
 #   backend:
 #     build:
@@ -23,6 +23,8 @@
 # networks:
 #   app-network:
 #     driver: bridge
+
+#Produccion
 
 services:
   backend:

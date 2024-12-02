@@ -1,4 +1,4 @@
-# Etapa 1: Construcción
+#Etapa 1: Construcción
 FROM node:19 AS builder
 
 # Establece el directorio de trabajo
@@ -29,7 +29,7 @@ EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 
 
-## Desarrrollo
+# Desarrrollo
 # FROM node:19
 
 # WORKDIR /app

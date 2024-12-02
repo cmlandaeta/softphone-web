@@ -87,11 +87,11 @@ const Teclado = ({ usuario, onSwitch, onUpdate }) => {
           setTimeout(() => {
             setAudio(" ");
             setCallStatus("Llamada Finalizada!");
-          }, 21000);
+          }, 16000);
 
           setTimeout(() => {
             setCallStatus(" ");
-          }, 23000);
+          }, 18000);
         } else if (response.status === 401) {
           handleShowAlert("info", "ERROR", "Registre la extension!");
         }

@@ -42,18 +42,26 @@ class usuariosControllers {
   async updateUsuarios(req, res) {
     console.log(req.body);
     const check = await validation(req.body);
-    const { exten } = req.params.id;
+    const exten = req.params.id;
 
     if (check) {
       return res.status(400).json({ error: "Todos los campos son requeridos" });
     }
+    const { nombre, apellido, password } = req.body;
+    const passwordEncriptada = await bcrypt.hash(password, 10);
 
+    const datosActualizar = {
+      nombre,
+      apellido,
+      password: passwordEncriptada,
+    };
     try {
       const updateUser = await Usuarios.updateOne(
         { extensionregistro: exten },
-        req.body
+        datosActualizar
       );
-      if (updateUser) res.status(200).res.json({ msg: "usuario actualizado" });
+      console.log(updateUser);
+      if (updateUser) res.status(200).json({ msg: "usuario actualizado" });
     } catch (error) {
       res
         .status(501)

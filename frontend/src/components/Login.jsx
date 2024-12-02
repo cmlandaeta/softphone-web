@@ -13,7 +13,7 @@ const Login = ({}) => {
   const [showModalLogin, setModalLogin] = useState(true);
   const [usuario, setUsuario] = useState({});
   const [showModalRegister, setModalRegister] = useState(false);
-  const [isEditModeRegister, setIsModeRegister] = useState("");
+  const [isEditModeRegister, setIsEditModeRegister] = useState("");
   const [titleModal, setTitleModal] = useState("");
 
   const [formData, setFormData] = useState({
@@ -65,7 +65,7 @@ const Login = ({}) => {
         setModalTeclado(false);
         setModalRegister(true);
         setTitleModal("Editar Cuenta");
-        setIsModeRegister(true);
+        setIsEditModeRegister(true);
         break;
 
       default:
