@@ -7,7 +7,6 @@ class usuariosControllers {
   constructor() {}
 
   async createUsuarios(req, res) {
-    console.log("ENTRA AQUI");
     const {
       nombre,
       apellido,
@@ -28,40 +27,54 @@ class usuariosControllers {
       password: passwordEncriptada,
     };
 
+    console.log(datosNuevosUsuario);
+
     const nuevoUsuario = new Usuarios(datosNuevosUsuario);
 
-    try {
-      const usuarioscreado = await nuevoUsuario.save();
+    const usuarioscreado = await nuevoUsuario.save();
 
-      res.status(200).json({ msg: "Usuario Creado", usuarioscreado });
-    } catch (error) {
-      res.status(501).json({ mensagge: "error al crear el usuarios", error });
-    }
+    // try {
+    //   res.status(200).json({ msg: "Usuario Creado", usuarioscreado });
+    // } catch (error) {
+    //   res.status(501).json({ mensagge: "error al crear el usuarios", error });
+    // }
   }
 
   async updateUsuarios(req, res) {
-    console.log(req.body);
     const check = await validation(req.body);
     const exten = req.params.id;
+
+    const extension = parseInt(exten);
+
+    const { password, ...restoDeDatos } = req.body;
+
+    const usuario = await Usuarios.findOne({ extensionregistro: extension });
 
     if (check) {
       return res.status(400).json({ error: "Todos los campos son requeridos" });
     }
-    const { nombre, apellido, password } = req.body;
-    const passwordEncriptada = await bcrypt.hash(password, 10);
 
-    const datosActualizar = {
-      nombre,
-      apellido,
-      password: passwordEncriptada,
-    };
+    if (!usuario) {
+      return res.status(404).json({ mensaje: "Usuario no encontrado" });
+    }
+
+    // Si se envía una contraseña y es diferente a la actual, encriptarla
+    if (password && !bcrypt.compare(password, usuario.password)) {
+      restoDeDatos.password = await bcrypt.hash(password, 10);
+    }
+
+    // const datosActualizar = {
+    //   nombre,
+    //   apellido,
+    //   password: !compararPassword,
+    // };
     try {
-      const updateUser = await Usuarios.updateOne(
-        { extensionregistro: exten },
-        datosActualizar
+      const updateUser = await Usuarios.findOneAndUpdate(
+        { extensionregistro: extension },
+        restoDeDatos
       );
-      console.log(updateUser);
-      if (updateUser) res.status(200).json({ msg: "usuario actualizado" });
+
+      if (updateUser) res.status(200).json(updateUser);
     } catch (error) {
       res
         .status(501)

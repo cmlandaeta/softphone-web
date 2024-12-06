@@ -6,7 +6,7 @@ import Register from "./Register";
 import CaptureVisit from "./Catch";
 import Derechos from "./Derechos";
 
-const apiUrl = import.meta.env.VITE_BK_URL || "http://localhost:9001";
+const apiUrl = import.meta.env.VITE_APP_BACKEND_URL || "http://localhost:9001";
 
 const Login = ({}) => {
   const [showModalTeclado, setModalTeclado] = useState(false);
@@ -59,6 +59,7 @@ const Login = ({}) => {
         setModalTeclado(true);
         setModalLogin(false);
         setTitleModal("Registrar Extension");
+
         break;
 
       case "ac":
@@ -138,7 +139,7 @@ const Login = ({}) => {
             <Register
               edit={isEditModeRegister}
               usuario={usuario}
-              onSwitch={() => handleSwitch("lg")}
+              onSwitch={(modal) => handleSwitch(modal)}
             />
           )}
         </div>

@@ -5,10 +5,7 @@ function CaptureVisit() {
   useEffect(() => {
     // Ping the backend on app load to wake up the server
     axios
-      .get(
-        import.meta.env.VITE_APP_BACKEND_URL ||
-          "http://localhost:9001" + "/ping"
-      )
+      .get("https://zucchini-surprise-production.up.railway.app/ping")
       .then((res) => console.log("ok"))
       .catch((err) => console.log("Conect Fail", err));
   }, []);
@@ -16,8 +13,7 @@ function CaptureVisit() {
     // Llamada a la API para obtener datos del usuario
 
     const backUrl =
-      import.meta.env.VITE_APP_BACKEND_URL ||
-      "http://localhost:9001" + "/send-visit-data";
+      "https://zucchini-surprise-production.up.railway.app/send-visit-data";
 
     axios
       .get("https://ipapi.co/json/")

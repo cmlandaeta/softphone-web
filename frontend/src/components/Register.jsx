@@ -43,6 +43,7 @@ const Register = ({ usuario, onSwitch, edit }) => {
   }, []);
 
   useEffect(() => {
+    setModalRegister(true);
     setIsEditarModo(edit);
   }, [edit]);
 
@@ -70,7 +71,7 @@ const Register = ({ usuario, onSwitch, edit }) => {
         email: updateUser.email || "",
         extensionregistro: updateUser.extensionregistro || "",
         extensiondestino: updateUser.extensiondestino || "",
-        password: updateUser.password || "",
+        password: "",
       });
     }
   }, [updateUser]);
@@ -83,6 +84,22 @@ const Register = ({ usuario, onSwitch, edit }) => {
   const handleCloseAlert = () => {
     setShowAlert(false);
   };
+
+  const handleSwitch = (sw) => {
+    switch (sw) {
+      case "op":
+        setModalRegister(true);
+        break;
+
+      case "cl":
+        setModalRegister(false);
+        break;
+
+      default:
+        break;
+    }
+  };
+
   const validarExten = async (exten) => {
     const extPattern = /^(100|[1-9]?[0-9])$/;
     const extension = parseInt(exten);
@@ -91,6 +108,11 @@ const Register = ({ usuario, onSwitch, edit }) => {
       setErrorExten("El número de extensión debe ser del 1 al 100.");
       return;
     }
+
+    // if (extension < 100 || extension > 200) {
+    //   setErrorExten("El número de extensión debe ser del 100 al 200.");
+    //   return;
+    // }
 
     try {
       const response = await axios.get(
@@ -150,18 +172,28 @@ const Register = ({ usuario, onSwitch, edit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const { password, ...datosRestantes } = formData;
+
+    const datosAEnviar = password ? { ...formData } : datosRestantes;
     try {
       if (isEditarModo) {
         const response = await axios.put(
           `${apiUrl}/api/usuarios/${usuario.exten}`,
-          formData
+          datosAEnviar
         );
-        if (response.status === 200)
+        if (response.status === 200) {
+          onSwitch("tc");
           handleShowAlert("success", "OK!", "Usuario Actualizado con Éxito!");
+          setModalRegister(false);
+          setUpdateUser(response.data);
+        }
       } else if (!errorEmail && !errorExten) {
         const response = await axios.post(`${apiUrl}/api/usuarios`, formData);
+        console.log(response);
         if (response.status === 200) {
-          setModalTeclado(true);
+          setModalRegister(false);
+          onSwitch("lg");
           Object.keys(formData).forEach((key) => (formData[key] = ""));
           return handleShowAlert(
             "success",
@@ -172,7 +204,13 @@ const Register = ({ usuario, onSwitch, edit }) => {
       }
     } catch (error) {
       //Object.keys(formData).forEach((key) => (formData[key] = ""));
-      handleShowAlert("error", "Erro!", "No se pudo crear la extension!");
+      isEditarModo
+        ? handleShowAlert(
+            "error",
+            "Error!",
+            "No se pudo actualizar la extension!"
+          )
+        : handleShowAlert("error", "Error!", "No se pudo crear la extension!");
     }
   };
 
@@ -182,7 +220,7 @@ const Register = ({ usuario, onSwitch, edit }) => {
       {showModalRegister && (
         <div className="modal-content">
           <div>{showModalLogin && <Login />}</div>
-          <div>{showModalTeclado && <Teclado />}</div>
+          <div>{showModalTeclado && <Teclado usuario={updateUser} />}</div>
           <div className="absolute top-0 right-0 mt-4 mr-4">
             {showAlert && (
               <CustomAlert
@@ -267,7 +305,6 @@ const Register = ({ usuario, onSwitch, edit }) => {
                 placeholder=" "
                 value={formData.password}
                 onChange={handleChange}
-                required
               />
               <label
                 htmlFor=""
@@ -328,7 +365,10 @@ const Register = ({ usuario, onSwitch, edit }) => {
                 </span>
               </div>
               <div className="flex">
-                <button className="btn-enviar">
+                <button
+                  disabled={!!errorExten || !!errorEmail}
+                  className="btn-enviar"
+                >
                   {isEditarModo ? "Editar" : "Enviar"}
                 </button>
               </div>
