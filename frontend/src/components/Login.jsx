@@ -42,6 +42,14 @@ const Login = ({}) => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleRechargeUser = async () => {
+    const response = await axios.get(`${apiUrl}/api/usuarios/${usuario.exten}`);
+
+    const { extensionregistro, nombre, apellido } = response.data;
+
+    setUsuario({ ...usuario, extensionregistro, nombre, apellido });
+  };
+
   const handleSwitch = (sw) => {
     switch (sw) {
       case "rg":
@@ -59,6 +67,15 @@ const Login = ({}) => {
         setModalTeclado(true);
         setModalLogin(false);
         setTitleModal("Registrar Extension");
+        setModalRegister(false);
+
+        break;
+      case "tc2":
+        handleRechargeUser();
+        setModalTeclado(true);
+        setModalLogin(false);
+        setTitleModal("Registrar Extension");
+        setModalRegister(false);
 
         break;
 
@@ -95,12 +112,6 @@ const Login = ({}) => {
   const hanleUpdate = () => {
     handleSwitch("ac");
   };
-
-  useEffect(() => {
-    const handleGestionLogout = () => {};
-    handleGestionLogout();
-  }),
-    [];
 
   const handleClick = (pn) => {
     switch (pn) {
@@ -140,6 +151,7 @@ const Login = ({}) => {
               edit={isEditModeRegister}
               usuario={usuario}
               onSwitch={(modal) => handleSwitch(modal)}
+              openModal={isEditModeRegister}
             />
           )}
         </div>

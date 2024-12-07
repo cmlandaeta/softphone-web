@@ -11,7 +11,7 @@ const Teclado = ({ usuario, onSwitch, onUpdate }) => {
 
   const [idinputs, setIdInputs] = useState("");
   const [inputValue, setInputValue] = useState("");
-  const [user, setUser] = useState(usuario);
+  const [user, setUser] = useState("");
   const [status, setStatus] = useState("Offline");
   const [callStatus, setCallStatus] = useState("");
   const [isRegister, setRegister] = useState(true);
@@ -21,7 +21,10 @@ const Teclado = ({ usuario, onSwitch, onUpdate }) => {
     title: "",
     message: "",
   });
-  const navigate = useNavigate();
+
+  useEffect(() => {
+    setUser(usuario);
+  }, [usuario]);
 
   const handleShowAlert = (type, title, message) => {
     setAlertConfig({ type, title, message });

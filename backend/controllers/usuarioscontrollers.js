@@ -31,13 +31,12 @@ class usuariosControllers {
 
     const nuevoUsuario = new Usuarios(datosNuevosUsuario);
 
-    const usuarioscreado = await nuevoUsuario.save();
-
-    // try {
-    //   res.status(200).json({ msg: "Usuario Creado", usuarioscreado });
-    // } catch (error) {
-    //   res.status(501).json({ mensagge: "error al crear el usuarios", error });
-    // }
+    try {
+      const usuarioscreado = await nuevoUsuario.save();
+      res.status(200).json({ msg: "Usuario Creado", usuarioscreado });
+    } catch (error) {
+      res.status(501).json({ mensagge: "error al crear el usuarios", error });
+    }
   }
 
   async updateUsuarios(req, res) {
