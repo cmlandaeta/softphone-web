@@ -52,7 +52,7 @@ jobs:
         run: |
           railway up --service soft-back
 
-      # Paso 6: Desplegar al servicio especificado
+      # Paso 7: Desplegar al servicio especificado
       - name: Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
