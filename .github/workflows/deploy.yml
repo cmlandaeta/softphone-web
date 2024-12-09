@@ -50,11 +50,11 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway up --service soft-back --build --docker-image cmlandaeta/soft-web:soft-back
+          railway up --service soft-back --docker-image cmlandaeta/soft-web:soft-back
 
       # Paso 7: Desplegar al servicio especificado
       - name: Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway up --service soft-front --build --docker-image cmlandaeta/soft-web:latest
+          railway up --service soft-front  --docker-image cmlandaeta/soft-web:latest
