@@ -24,14 +24,13 @@ jobs:
       # Paso 3: Build and Push Backend Image
       - name: Build and Push Backend Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/soft-web:soft-back ./backend
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/soft-web:soft-back .
           docker push ${{ secrets.DOCKER_USERNAME }}/soft-web:soft-back
 
       # Paso 4: Build and Push Frontend Image
       - name: Build and Push Frontend Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/soft-web:latest ./frontend
-          docker push ${{ secrets.DOCKER_USERNAME }}/soft-web:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/soft-web:latest .
 
           # Install Railway CLI
       - name: Install Railway CLI
