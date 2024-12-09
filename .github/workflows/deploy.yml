@@ -33,6 +33,15 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/soft-web:latest ./frontend
           docker push ${{ secrets.DOCKER_USERNAME }}/soft-web:latest
 
-      - name: Deploy to Railway
+          # Install Railway CLI
+      - name: Install Railway CLI
         run: |
-          railway up --token ${{ secrets.RAILWAY_TOKEN }}
+          curl -fsSL https://railway.app/install.sh | sh
+          echo 'export PATH=$HOME/.railway/bin:$PATH' >> $GITHUB_ENV
+
+      # Deploy to Railway
+      - name: Deploy to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          railway up
