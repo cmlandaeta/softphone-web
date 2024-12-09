@@ -39,9 +39,22 @@ jobs:
           curl -fsSL https://railway.app/install.sh | sh
           echo 'export PATH=$HOME/.railway/bin:$PATH' >> $GITHUB_ENV
 
-      # Deploy to Railway
+        # Paso 5: (Opcional) Listar servicios para depuración
+      - name: List Railway Services
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: railway status
+
+      # Paso 6: Desplegar al servicio especificado
       - name: Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway up
+          railway up --service backend
+
+      # Paso 6: Desplegar al servicio especificado
+      - name: Deploy to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          railway up --service frontend
