@@ -25,13 +25,13 @@ jobs:
       - name: Build and Push Backend Docker Image
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/soft-web:soft-back ./backend
-          docker push ${{ secrets.DOCKER_USERNAME }}/cmlandaeta:soft-back
+          docker push ${{ secrets.DOCKER_USERNAME }}/soft-web:soft-back
 
       # Paso 4: Build and Push Frontend Image
       - name: Build and Push Frontend Docker Image
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/soft-web:latest ./frontend
-          docker push ${{ secrets.DOCKER_USERNAME }}/cmlandaeta:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/soft-web:latest
 
       - name: Deploy to Railway
         run: |
