@@ -6,7 +6,7 @@ on:
       - master # Se ejecuta cuando hay un push a la rama principal
 
 jobs:
-  build-and-push:
+  docker: #build-and-push
     runs-on: ubuntu-latest
 
     steps:
