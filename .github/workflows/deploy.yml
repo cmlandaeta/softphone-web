@@ -31,6 +31,7 @@ jobs:
       - name: Build and Push Frontend Docker Image
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/soft-web:latest .
+          docker push ${{ secrets.DOCKER_USERNAME }}/soft-web:latest
 
           # Install Railway CLI
       - name: Install Railway CLI
@@ -49,11 +50,11 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway up --service soft-back
+          railway up --service soft-back --build --docker-image cmlandaeta/soft-web:soft-back
 
       # Paso 7: Desplegar al servicio especificado
       - name: Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway up --service soft-front
+          railway up --service soft-front --build --docker-image cmlandaeta/soft-web:latest
