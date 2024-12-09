@@ -50,11 +50,11 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway up --service backend
+          railway up --service soft-back
 
       # Paso 6: Desplegar al servicio especificado
       - name: Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway up --service frontend
+          railway up --service soft-front
